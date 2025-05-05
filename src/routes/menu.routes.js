@@ -1,5 +1,7 @@
 import express from 'express';
 import { MenuController } from '../controllers/menu.controller.js';
+import { requireAuth } from '../middleware/auth.js';
+
 
 const router = express.Router({ mergeParams: true });
 
@@ -10,12 +12,12 @@ router.get('/:restaurant_id/menu', MenuController.getMenu);
 router.get('/:restaurant_id/menu/items/:item_id', MenuController.getMenuItem);
 
 // Add a new menu item
-router.post('/:restaurant_id/menu/items', MenuController.addMenuItem);
+router.post('/:restaurant_id/menu/items',requireAuth, MenuController.addMenuItem);
 
 // Update a menu item
-router.put('/:restaurant_id/menu/items/:item_id', MenuController.updateMenuItem);
+router.put('/:restaurant_id/menu/items/:item_id', requireAuth,MenuController.updateMenuItem);
 
 // Delete a menu item
-router.delete('/:restaurant_id/menu/items/:item_id', MenuController.deleteMenuItem);
+router.delete('/:restaurant_id/menu/items/:item_id',requireAuth, MenuController.deleteMenuItem);
 
 export default router;

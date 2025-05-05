@@ -1,18 +1,24 @@
-import { supabase } from '../config/supabase.js';
+import { createClient } from '@supabase/supabase-js';
 
-export const adminAuth = async (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  
-  try {
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-    
-    if (error || user?.user_metadata?.role !== 'admin') {
-      return res.status(403).json({ error: 'Unauthorized' });
-    }
-    
-    req.user = user;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: 'Invalid token' });
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY // Use service role key for backend verification
+);
+
+export const requireAuth = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or invalid Authorization header' });
   }
+  const token = authHeader.replace('Bearer ', '');
+
+  // Verify the access token with Supabase
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if (error || !user) {
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+
+  // Attach user info to request for downstream handlers
+  req.user = user;
+  next();
 };

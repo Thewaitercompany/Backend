@@ -3,6 +3,8 @@ import restaurantRoutes from './routes/restaurant.routes.js';
 import menuRoutes from './routes/menu.routes.js';
 import { supabase } from './config/supabase.js';
 import tableRoutes from './routes/table.routes.js';
+import orderRoutes from './routes/order.routes.js';
+
 
 
 const app = express();
@@ -12,6 +14,8 @@ app.use(express.json());
 app.use('/api/restaurant', restaurantRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/table', tableRoutes);
+app.use('/api/order', orderRoutes);
+
 
 
 // Supabase Realtime

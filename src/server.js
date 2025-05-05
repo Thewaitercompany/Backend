@@ -2,6 +2,8 @@ import express from 'express';
 import restaurantRoutes from './routes/restaurant.routes.js';
 import menuRoutes from './routes/menu.routes.js';
 import { supabase } from './config/supabase.js';
+import tableRoutes from './routes/table.routes.js';
+
 
 const app = express();
 app.use(express.json());
@@ -9,6 +11,8 @@ app.use(express.json());
 // Routes
 app.use('/api/restaurant', restaurantRoutes);
 app.use('/api/menu', menuRoutes);
+app.use('/api/table', tableRoutes);
+
 
 // Supabase Realtime
 const channel = supabase.channel('schema-db-changes')

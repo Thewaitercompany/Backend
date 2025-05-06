@@ -1,9 +1,12 @@
 import { RestaurantModel } from '../models/restaurant.model.js';
 
 export const RestaurantController = {
-  getRestaurantProfile: async (req, res) => {
+  // Only allow owner to access their restaurant profile
+  getMyRestaurants: async (req, res) => {
     try {
-      const { data, error } = await RestaurantModel.getProfile(req.params.id);
+      const ownerId = req.user.id; // Comes from requireAuth middleware
+      const { data, error } = await RestaurantModel.getMyRestaurants(ownerId);
+
       if (error) throw error;
       res.json(data);
     } catch (err) {
@@ -11,12 +14,17 @@ export const RestaurantController = {
     }
   },
 
+  // Only allow owner to update their restaurant
   updateRestaurantProfile: async (req, res) => {
     try {
-      const { data, error } = await RestaurantModel.updateProfile(
-        req.params.id,
-        req.body
-      );
+      // Fetch the restaurant first
+      const { data: restaurant, error: fetchError } = await RestaurantModel.getProfile(req.params.id);
+      if (fetchError) throw fetchError;
+      if (!restaurant || restaurant.owner_id !== req.user.id) {
+        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+      }
+      // Only owner can update
+      const { data, error } = await RestaurantModel.updateProfile(req.params.id, req.body);
       if (error) throw error;
       res.json(data);
     } catch (err) {
@@ -24,22 +32,31 @@ export const RestaurantController = {
     }
   },
 
-  createRestaurant: async (req, res) => {
+  // Only allow owner to delete their restaurant
+  deleteRestaurant: async (req, res) => {
     try {
-      const { data, error } = await RestaurantModel.create(req.body);
+      // Fetch the restaurant first
+      const { data: restaurant, error: fetchError } = await RestaurantModel.getProfile(req.params.id);
+      if (fetchError) throw fetchError;
+      if (!restaurant || restaurant.owner_id !== req.user.id) {
+        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+      }
+      // Only owner can delete
+      const { error } = await RestaurantModel.delete(req.params.id);
       if (error) throw error;
-      res.status(201).json(data);
+      res.json({ message: 'Restaurant deleted successfully.' });
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
   },
 
-  deleteRestaurant: async (req, res) => {
+  // When creating, set owner_id to the logged-in user
+  createRestaurant: async (req, res) => {
     try {
-      const { id } = req.params;
-      const { error } = await RestaurantModel.delete(id);
+      const restaurantData = { ...req.body, owner_id: req.user.id };
+      const { data, error } = await RestaurantModel.create(restaurantData);
       if (error) throw error;
-      res.json({ message: 'Restaurant deleted successfully.' });
+      res.status(201).json(data);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

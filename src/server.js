@@ -5,6 +5,8 @@ import { supabase } from './config/supabase.js';
 import tableRoutes from './routes/table.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import ingredientRoutes from './routes/ingredient.routes.js';
+import orderItemRoutes from './routes/orderItem.routes.js';
+import staffRoutes from './routes/staff.routes.js';
 
 
 
@@ -18,6 +20,8 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/table', tableRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/ingredient', ingredientRoutes);
+app.use('/api/orderItem', orderItemRoutes);
+app.use('/api/staff', staffRoutes);
 
 
 

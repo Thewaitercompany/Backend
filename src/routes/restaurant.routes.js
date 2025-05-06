@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/',requireAuth, RestaurantController.createRestaurant)
 
 // Restaurant Profile Routes
-router.get('/:id',requireAuth, RestaurantController.getRestaurantProfile);
+router.get('/', requireAuth, RestaurantController.getMyRestaurants);
 router.put('/:id',  requireAuth,RestaurantController.updateRestaurantProfile);
 router.delete('/:id',  requireAuth,RestaurantController.deleteRestaurant);
 

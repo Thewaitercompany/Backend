@@ -7,7 +7,11 @@ import orderRoutes from './routes/order.routes.js';
 import ingredientRoutes from './routes/ingredient.routes.js';
 import orderItemRoutes from './routes/orderItem.routes.js';
 import staffRoutes from './routes/staff.routes.js';
-
+import notificationRoutes from './routes/notification.routes.js';
+import taxRoutes from './routes/tax.routes.js';
+import wastageRoutes from './routes/wastage.routes.js'; 
+import purchaseRoutes from './routes/purchase.routes.js'; // Import purchase routes
+import reviewroutes from './routes/review.routes.js'; // Import review routes
 
 
 
@@ -22,6 +26,12 @@ app.use('/api/order', orderRoutes);
 app.use('/api/ingredient', ingredientRoutes);
 app.use('/api/orderItem', orderItemRoutes);
 app.use('/api/staff', staffRoutes);
+app.use('/api/notification', notificationRoutes);
+app.use('/api/tax', taxRoutes);
+app.use('/api/wastage', wastageRoutes);
+app.use('/api/purchase', purchaseRoutes); // Use purchase routes
+app.use('/api/review', reviewroutes); // Use review routes
+
 
 
 

@@ -17,7 +17,7 @@ export const OrderController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: `Failed to fetch orders: ${err.message}` });
     }
   },
 
@@ -29,7 +29,7 @@ export const OrderController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({ error: `Order with ID ${req.params.order_id} not found: ${err.message}` });
     }
   },
 
@@ -41,7 +41,7 @@ export const OrderController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create order for restaurant ID ${restaurant_id}: ${err.message}` });
     }
   },
 
@@ -53,7 +53,7 @@ export const OrderController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update order with ID ${order_id}: ${err.message}` });
     }
   },
 
@@ -65,7 +65,7 @@ export const OrderController = {
       if (error) throw error;
       res.json({ message: 'Order deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete order with ID ${order_id}: ${err.message}` });
     }
   }
 };

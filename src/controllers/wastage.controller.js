@@ -10,13 +10,13 @@ export const WastageController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You do not own this restaurant.' });
       }
       const { data, error } = await WastageModel.create({ restaurant_id, ingredient_id, quantity, unit, reason, date });
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create wastage record: ${err.message}` });
     }
   },
 
@@ -28,13 +28,13 @@ export const WastageController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You do not own this restaurant.' });
       }
       const { data, error } = await WastageModel.getByRestaurant(restaurant_id);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to retrieve wastage records: ${err.message}` });
     }
   },
 
@@ -49,13 +49,13 @@ export const WastageController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(wastage.restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You do not own this restaurant.' });
       }
       const { data, error } = await WastageModel.update(id, req.body);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update wastage record: ${err.message}` });
     }
   },
 
@@ -70,13 +70,13 @@ export const WastageController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(wastage.restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You do not own this restaurant.' });
       }
       const { error } = await WastageModel.delete(id);
       if (error) throw error;
       res.json({ message: 'Wastage record deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete wastage record: ${err.message}` });
     }
   }
 };

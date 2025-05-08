@@ -4,7 +4,7 @@ export const MenuItemIngredientController = {
   getIngredients: async (req, res) => {
     const { item_id } = req.params;
     const { data, error } = await MenuItemIngredientModel.getAllForMenuItem(item_id);
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: `Failed to fetch ingredients for item ${item_id}: ${error.message}` });
     res.json(data);
   },
 
@@ -14,7 +14,7 @@ export const MenuItemIngredientController = {
     const { data, error } = await MenuItemIngredientModel.addMany(item_id, req.body);
     if (error) {
       console.log('Supabase error:', error); // Debug
-      return res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: `Unable to add ingredients for item ${item_id}: ${error.message}` });
     }
     res.status(201).json(data);
   },
@@ -22,14 +22,14 @@ export const MenuItemIngredientController = {
   updateIngredient: async (req, res) => {
     const { item_id, ingredient_id } = req.params;
     const { data, error } = await MenuItemIngredientModel.update(item_id, ingredient_id, req.body);
-    if (error) return res.status(400).json({ error: error.message });
+    if (error) return res.status(400).json({ error: `Failed to update ingredient ${ingredient_id} for item ${item_id}: ${error.message}` });
     res.json(data);
   },
 
   removeIngredient: async (req, res) => {
     const { item_id, ingredient_id } = req.params;
     const { error } = await MenuItemIngredientModel.remove(item_id, ingredient_id);
-    if (error) return res.status(400).json({ error: error.message });
+    if (error) return res.status(400).json({ error: `Failed to remove ingredient ${ingredient_id} from item ${item_id}: ${error.message}` });
     res.json({ message: 'Ingredient removed from menu item.' });
   },
 
@@ -44,11 +44,11 @@ export const MenuItemIngredientController = {
       }
 
       const { data, error } = await MenuItemIngredientModel.create(restaurant_id, ingredient);
-      if (error) return res.status(400).json({ error: error.message });
+      if (error) return res.status(400).json({ error: `Failed to add ingredient for restaurant ${restaurant_id}: ${error.message}` });
 
       res.status(201).json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: `Server error while adding ingredient: ${err.message}` });
     }
   }
 };

@@ -9,7 +9,7 @@ export const TableController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: `Failed to retrieve tables: ${err.message}` });
     }
   },
 
@@ -21,7 +21,7 @@ export const TableController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(404).json({ error: 'Table not found.' });
+      res.status(404).json({ error: `Failed to retrieve table: ${err.message}` });
     }
   },
 
@@ -43,7 +43,7 @@ export const TableController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create table: ${err.message}` });
     }
   },
 
@@ -55,7 +55,7 @@ export const TableController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update table: ${err.message}` });
     }
   },
 
@@ -67,7 +67,7 @@ export const TableController = {
       if (error) throw error;
       res.json({ message: 'Table deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete table: ${err.message}` });
     }
   },
   

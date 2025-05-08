@@ -14,7 +14,7 @@ export const MenuController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: `Failed to fetch menu for restaurant ${req.params.restaurant_id}: ${err.message}` });
     }
   },
 
@@ -26,7 +26,7 @@ export const MenuController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({ error: `Menu item with ID ${req.params.item_id} not found: ${err.message}` });
     }
   },
 
@@ -38,7 +38,7 @@ export const MenuController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to add new menu item: ${err.message}` });
     }
   },
 
@@ -50,7 +50,7 @@ export const MenuController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update menu item with ID ${req.params.item_id}: ${err.message}` });
     }
   },
 
@@ -62,7 +62,7 @@ export const MenuController = {
       if (error) throw error;
       res.json({ message: 'Menu item deleted' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete menu item with ID ${req.params.item_id}: ${err.message}` });
     }
   }
 };

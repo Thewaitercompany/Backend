@@ -13,7 +13,7 @@ export const PurchaseController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have access to this restaurant' });
       }
       const { data, error } = await PurchaseModel.create({
         restaurant_id, ingredient_id, quantity, unit, cost_per_unit, total_cost,
@@ -22,7 +22,7 @@ export const PurchaseController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create purchase record: ${err.message}` });
     }
   },
 
@@ -34,13 +34,13 @@ export const PurchaseController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have access to this restaurant' });
       }
       const { data, error } = await PurchaseModel.getByRestaurant(restaurant_id);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to fetch purchase records: ${err.message}` });
     }
   },
 
@@ -51,17 +51,17 @@ export const PurchaseController = {
       // Get purchase and restaurant for ownership check
       const { data: purchase, error: purchaseError } = await PurchaseModel.getById(id);
       if (purchaseError) throw purchaseError;
-      if (!purchase) return res.status(404).json({ error: 'Purchase not found' });
+      if (!purchase) return res.status(404).json({ error: `Purchase record with ID ${id} not found` });
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(purchase.restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have access to this restaurant' });
       }
       const { data, error } = await PurchaseModel.update(id, req.body);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update purchase record: ${err.message}` });
     }
   },
 
@@ -72,17 +72,17 @@ export const PurchaseController = {
       // Get purchase and restaurant for ownership check
       const { data: purchase, error: purchaseError } = await PurchaseModel.getById(id);
       if (purchaseError) throw purchaseError;
-      if (!purchase) return res.status(404).json({ error: 'Purchase not found' });
+      if (!purchase) return res.status(404).json({ error: `Purchase record with ID ${id} not found` });
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(purchase.restaurant_id);
       if (restError) throw restError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have access to this restaurant' });
       }
       const { error } = await PurchaseModel.delete(id);
       if (error) throw error;
       res.json({ message: 'Purchase record deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete purchase record: ${err.message}` });
     }
   }
 };

@@ -10,7 +10,7 @@ export const RestaurantController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: `Failed to retrieve your restaurants: ${err.message}` });
     }
   },
 
@@ -21,14 +21,14 @@ export const RestaurantController = {
       const { data: restaurant, error: fetchError } = await RestaurantModel.getProfile(req.params.id);
       if (fetchError) throw fetchError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have permission to update this restaurant' });
       }
       // Only owner can update
       const { data, error } = await RestaurantModel.updateProfile(req.params.id, req.body);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update restaurant profile: ${err.message}` });
     }
   },
 
@@ -39,14 +39,14 @@ export const RestaurantController = {
       const { data: restaurant, error: fetchError } = await RestaurantModel.getProfile(req.params.id);
       if (fetchError) throw fetchError;
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Forbidden: You do not have permission to delete this restaurant' });
       }
       // Only owner can delete
       const { error } = await RestaurantModel.delete(req.params.id);
       if (error) throw error;
       res.json({ message: 'Restaurant deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete restaurant: ${err.message}` });
     }
   },
 
@@ -58,7 +58,7 @@ export const RestaurantController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create restaurant: ${err.message}` });
     }
   }
 };

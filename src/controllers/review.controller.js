@@ -10,14 +10,14 @@ export const ReviewController = {
       const { data: restaurant, error: restError } = await RestaurantModel.getProfile(restaurant_id);
       if (restError) throw restError;
       if (!restaurant) {
-        return res.status(404).json({ error: 'Restaurant not found' });
+        return res.status(404).json({ error: 'Cannot add review: Restaurant not found' });
       }
       // Anyone can post a review, so no owner check here unless you want to restrict
       const { data, error } = await ReviewModel.create({ restaurant_id, staff_id, customer_name, rating, comment });
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create review: ${err.message}` });
     }
   },
 
@@ -29,7 +29,7 @@ export const ReviewController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to retrieve reviews for restaurant: ${err.message}` });
     }
   },
 
@@ -41,7 +41,7 @@ export const ReviewController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to retrieve reviews for staff: ${err.message}` });
     }
   },
 
@@ -52,7 +52,7 @@ export const ReviewController = {
       // Optionally check if the user is the restaurant owner before deleting
       const { data: review, error: reviewError } = await ReviewModel.getById(id);
       if (reviewError) throw reviewError;
-      if (!review) return res.status(404).json({ error: 'Review not found' });
+      if (!review) return res.status(404).json({ error: 'Cannot delete review: Review not found' });
       // Ownership check (optional)
       // const { data: restaurant, error: restError } = await RestaurantModel.getProfile(review.restaurant_id);
       // if (restError) throw restError;
@@ -63,7 +63,7 @@ export const ReviewController = {
       if (error) throw error;
       res.json({ message: 'Review deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete review: ${err.message}` });
     }
   }
 };

@@ -8,7 +8,7 @@ export const OrderItemController = {
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create order item: ${err.message}` });
     }
   },
 
@@ -19,7 +19,7 @@ export const OrderItemController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to fetch order items for order ID ${req.params.orderId}: ${err.message}` });
     }
   },
 
@@ -30,7 +30,7 @@ export const OrderItemController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({ error: `Order item with ID ${req.params.id} not found: ${err.message}` });
     }
   },
 
@@ -41,7 +41,7 @@ export const OrderItemController = {
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update order item with ID ${req.params.id}: ${err.message}` });
     }
   },
 
@@ -52,7 +52,7 @@ export const OrderItemController = {
       if (error) throw error;
       res.json({ message: 'Order item deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete order item with ID ${req.params.id}: ${err.message}` });
     }
   }
 };

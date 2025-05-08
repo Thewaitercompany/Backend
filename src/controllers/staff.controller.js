@@ -10,14 +10,14 @@ export const StaffController = {
       if (restError) throw restError;
       // Check ownership
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied. You are not authorized to add staff to this restaurant.' });
       }
       // Create staff
       const { data, error } = await StaffModel.create(req.body);
       if (error) throw error;
       res.status(201).json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to create staff: ${err.message}` });
     }
   },
 
@@ -30,14 +30,14 @@ export const StaffController = {
       if (restError) throw restError;
       // Check ownership
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You are not authorized to view staff for this restaurant.'  });
       }
       // Get staff
       const { data, error } = await StaffModel.getAllByRestaurant(restaurant_id);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to retrieve staff: ${err.message}` });
     }
   },
 
@@ -53,11 +53,11 @@ export const StaffController = {
       if (restError) throw restError;
       // Check ownership
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You are not authorized to view this staff member.' });
       }
       res.json(staff);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(404).json({ error: `Failed to get staff details: ${err.message}` });
     }
   },
 
@@ -73,14 +73,14 @@ export const StaffController = {
       if (restError) throw restError;
       // Check ownership
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You are not authorized to update this staff member.' });
       }
       // Update staff
       const { data, error } = await StaffModel.update(req.params.id, req.body);
       if (error) throw error;
       res.json(data);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to update staff: ${err.message}` });
     }
   },
 
@@ -96,14 +96,14 @@ export const StaffController = {
       if (restError) throw restError;
       // Check ownership
       if (!restaurant || restaurant.owner_id !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden: Not your restaurant' });
+        return res.status(403).json({ error: 'Access denied: You are not authorized to delete this staff member.' });
       }
       // Delete staff
       const { error } = await StaffModel.delete(req.params.id);
       if (error) throw error;
       res.json({ message: 'Staff deleted successfully.' });
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ error: `Failed to delete staff: ${err.message}` });
     }
   }
 };

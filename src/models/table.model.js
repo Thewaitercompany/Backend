@@ -39,11 +39,15 @@ export const TableModel = {
 
   // Delete a table
   remove: async (id) => {
-    return await supabase
+    const { data, error } = await supabase
       .from('tables')
       .delete()
-      .eq('id', id);
+      .eq('id', id)
+      .select(); // <-- Add this to get the deleted row(s)
+  
+    return { data, error };
   },
+  
 
  getByTableNumber: async (restaurant_id, table_number) => {
   const { data, error } = await supabase

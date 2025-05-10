@@ -63,13 +63,20 @@ export const TableController = {
   deleteTable: async (req, res) => {
     try {
       const { table_id } = req.params;
-      const { error } = await TableModel.remove(table_id);
+      const { data, error } = await TableModel.remove(table_id);
+  
       if (error) throw error;
+  
+      if (!data || data.length === 0) {
+        return res.status(404).json({ error: 'Table not found or already deleted.' });
+      }
+  
       res.json({ message: 'Table deleted successfully.' });
     } catch (err) {
       res.status(400).json({ error: `Failed to delete table: ${err.message}` });
     }
   },
+  
   
   
 };

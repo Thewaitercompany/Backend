@@ -20,15 +20,16 @@ export const MenuItemIngredientModel = {
       .select();
   },
 
-  update: async (menu_item_id, ingredient_id, updates) => {
-    return await supabase
-      .from('menu_item_ingredients')
-      .update(updates)
-      .eq('menu_item_id', menu_item_id)
-      .eq('ingredient_id', ingredient_id)
-      .select()
-      .single();
-  },
+ update: async (menu_item_id, ingredient_id, updates) => {
+  const { data, error } = await supabase
+    .from('menu_item_ingredients')
+    .update(updates)
+    .eq('menu_item_id', menu_item_id)
+    .eq('ingredient_id', ingredient_id)
+    .select();
+  return { data, error };
+},
+
 
   remove: async (menu_item_id, ingredient_id) => {
     return await supabase

@@ -11,7 +11,7 @@ router.post('/', requireAuth, NotificationController.createNotification);
 router.get('/restaurant/:restaurant_id', requireAuth, NotificationController.getNotifications);
 
 // Mark notification as read
-router.patch('/:id/read', requireAuth, NotificationController.markNotificationAsRead);
+router.put('/:id/read', requireAuth, NotificationController.markNotificationAsRead);
 
 // Delete notification
 router.delete('/:id', requireAuth, NotificationController.deleteNotification);

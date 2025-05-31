@@ -14,7 +14,7 @@ router.get('/order/:orderId', OrderItemController.getOrderItemsByOrder);
 router.get('/:id',  OrderItemController.getOrderItemById);
 
 // Update an order item
-router.put('/:id', requireAuth, OrderItemController.updateOrderItem);
+router.put('/:id',  OrderItemController.updateOrderItem);
 
 // Delete an order item
 router.delete('/:id',  OrderItemController.deleteOrderItem);
